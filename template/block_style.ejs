@@ -1,0 +1,424 @@
+<style type="text/css">
+    .hljs {
+      display: block;
+      overflow-x: auto;
+      padding: 0.5em;
+      background: #F0F0F0
+    }
+
+    .hljs,
+    .hljs-subst {
+      color: #444
+    }
+
+    .hljs-comment {
+      color: #888888
+    }
+
+    .hljs-keyword,
+    .hljs-attribute,
+    .hljs-selector-tag,
+    .hljs-meta-keyword,
+    .hljs-doctag,
+    .hljs-name {
+      font-weight: bold
+    }
+
+    .hljs-type,
+    .hljs-string,
+    .hljs-number,
+    .hljs-selector-id,
+    .hljs-selector-class,
+    .hljs-quote,
+    .hljs-template-tag,
+    .hljs-deletion {
+      color: #880000
+    }
+
+    .hljs-title,
+    .hljs-section {
+      color: #880000;
+      font-weight: bold
+    }
+
+    .hljs-regexp,
+    .hljs-symbol,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-link,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo {
+      color: #BC6060
+    }
+
+    .hljs-literal {
+      color: #78A960
+    }
+
+    .hljs-built_in,
+    .hljs-bullet,
+    .hljs-code,
+    .hljs-addition {
+      color: #397300
+    }
+
+    .hljs-meta {
+      color: #1f7199
+    }
+
+    .hljs-meta-string {
+      color: #4d99bf
+    }
+
+    .hljs-emphasis {
+      font-style: italic
+    }
+
+    .hljs-strong {
+      font-weight: bold
+    }
+
+    /**
+             * Noto Sans CJK JP: https://www.google.com/get/noto/#sans-jpan
+             * Noto Sans JP: https://fonts.google.com/earlyaccess#Noto+Sans+JP
+             */
+
+    @font-face {
+      font-family: 'Myrica';
+      font-style: normal;
+      font-weight: 400;
+      src: local("Myrica"),
+        url(https://storage.googleapis.com/flightbooks-a72f0.appspot.com/generate/Myrica.TTC) format('truetype');
+    }
+
+    /*  Hartija Css Print  Framework   * Version:   1.0 -- */
+
+    @media screen {
+      body {
+        max-width: 182mm;
+      }
+    }
+
+    body {
+      width: 100% !important;
+      font-family: "Mgen+ 2cp", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+      line-height: 1.75;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-weight: 300;
+      color: #000;
+      font-feature-settings: "palt";
+
+    }
+
+    /* Headings */
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      page-break-after: avoid;
+      font-weight: 600;
+    }
+
+    p,
+    h2,
+    h3 {
+      orphans: 3;
+      widows: 3;
+    }
+
+
+    hr {
+      background-color: #ccc;
+    }
+
+    ul {
+      list-style: square;
+    }
+
+    /* Images */
+
+    img {
+      margin: 1em auto 0.5em;
+      border: 1px solid #999;
+      max-width: 90% !important;
+      max-height: 640px !important;
+    }
+
+    a img {
+      border: none;
+    }
+
+    /* Links */
+
+    a:link,
+    a:visited {
+      background: transparent;
+      font-weight: 500;
+      text-decoration: none;
+      color: #333;
+    }
+
+    a[href^="http"]:link:after,
+    a[href^="http"]:visited:after {
+      content: "（"attr(href) " ）";
+      font-size: 90%;
+    }
+
+    abbr[title]:after {
+      content: "（ "attr(title) " ）";
+    }
+
+    /* Don't show linked images  */
+
+    a[href^="http://"] {
+      color: #000;
+    }
+
+    a[href$=".jpg"]:after,
+    a[href$=".jpeg"]:after,
+    a[href$=".gif"]:after,
+    a[href$=".png"]:after {
+      content: " ("attr(href) ") ";
+      display: none;
+    }
+
+    /* Don't show links that are fragment identifiers, or use the `JavaScript:` pseudo protocol .. taken from html5boilerplate */
+
+    a[href^="#"]:after,
+    a[href^="JavaScript:"]:after {
+      content: "";
+    }
+
+    strong,
+    b {
+      font-weight: 500;
+    }
+
+    /* Table */
+
+    table {
+      margin: 1px;
+      border: 1px solid #333;
+      text-align: left;
+      word-wrap: break-word;
+      table-layout: fixed;
+      width: 99%;
+    }
+
+    th {
+      border-bottom: 1px solid #333;
+      font-weight: 500;
+    }
+
+    td {
+      border-bottom: 1px solid #333;
+    }
+
+    tbody tr:last-child td,
+    tbody tr:last-child th {
+      border-bottom: none;
+    }
+
+    th,
+    td {
+      padding: 4px 10px;
+    }
+
+    tfoot {
+      font-style: italic;
+    }
+
+    caption {
+      background: #fff;
+      margin-bottom: 2em;
+      text-align: left;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    img,
+    tr {
+      page-break-inside: avoid;
+    }
+
+    @page {
+      <%=paperSize %>
+    }
+
+    body {
+      font-size: 11pt;
+    }
+
+    h1 {
+      font-size: 20pt;
+      border-bottom: #000 4px solid;
+      border-left: #000 12px solid;
+      padding-left: 12px;
+    }
+
+    h2 {
+      margin-top: 2.5em;
+      margin-bottom: 0.8em;
+      font-size: 17pt;
+      border-bottom: #000 2px solid;
+    }
+
+    h3,
+    h4,
+    h5 {
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      font-size: 16pt;
+    }
+
+    p code,
+    li code {
+      border: 1px solid #000;
+      background-color: #f3f3f3;
+      border-radius: 1px;
+      font-weight: bold;
+      padding: 2px 3px;
+    }
+
+    code {
+      font-size: 11pt;
+      font-family: "Myrica", monospace;
+      font-feature-settings: "initial";
+    }
+
+    pre {
+      padding: 10px 7px 10px;
+      border: 1px solid #000;
+      background-color: #f3f3f3;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    blockquote {
+      width: 100%;
+      margin: 1.2em;
+      padding: 1em;
+      font-size: 11pt;
+      word-wrap: break-word;
+    }
+
+    .content-body {
+      word-wrap: break-word;
+    }
+
+    #toc ul {
+      list-style-type: none;
+      padding-left: 80px;
+    }
+
+    #toc li {
+      margin: 10px 0;
+    }
+
+    #toc ul.toclevel1 {
+      padding-left: 0;
+    }
+
+    #toc ul.toclevel1>li {
+      border-left: 4px solid #000;
+      background-color: #CCC;
+      padding: 4px;
+      margin: 30px 0;
+      font-size: 14pt;
+    }
+
+    #toc ul.toclevel2>li,
+    #toc ul.toclevel3>li {
+      font-size: 11pt;
+      border-bottom: 1px solid #333;
+    }
+
+    #title,
+    #toc,
+    #introduction,
+    #conclusion,
+    #imprint {
+      page-break-before: always;
+    }
+
+    #title h1 {
+      border: none;
+      margin: 100px 50px;
+    }
+
+    #title .greeting {
+      padding: 10px 40px;
+    }
+
+    #title .auther {
+      margin: 50px 50px <%=Math.round(paperHeight /4) %>mm;
+      text-align: right;
+    }
+
+    #introduction .inner,
+    #conclusion .inner {
+      margin: 50px 50px;
+    }
+
+    #introduction .inner h1,
+    #introduction .inner h2,
+    #conclusion .inner h1,
+    #conclusion .inner h2 {
+      border-bottom: none;
+      border-left: none;
+      padding-left: 0;
+    }
+
+    #introduction .footer,
+    #conclusion .footer {
+      text-align: right;
+    }
+
+    .disclaimer {
+      border-top: 1px solid black;
+      bottom: 0;
+      left: 0;
+      margin-top: 36pt;
+      font-size: 9pt;
+    }
+
+    .disclaimer ul {
+      list-style: disc;
+      margin-right: 20px;
+    }
+
+    .service {
+      margin: 10px 0;
+    }
+
+    .service img {
+      border: none;
+      margin: 5px;
+    }
+
+    #imprint {
+      font-size: 10pt;
+    }
+
+    #imprint table {
+      border: none;
+      width: 100mm;
+    }
+
+    #imprint td,
+    #imprint th {
+      vertical-align: top;
+      border: none;
+    }
+
+    #imprint th {
+      text-align: right;
+      width: 30mm;
+    }
+  </style>

@@ -1,0 +1,11 @@
+version: '3'
+services:
+  flightbooks:
+    network_mode: host
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - CHROMIUM_PATH=/usr/bin/google-chrome
