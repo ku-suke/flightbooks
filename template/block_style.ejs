@@ -1,4 +1,8 @@
 <style type="text/css">
+    /**
+      * Syntax highlighting with highlight.js
+      * https://highlightjs.org/
+    */
     .hljs {
       display: block;
       overflow-x: auto;
@@ -77,11 +81,6 @@
     .hljs-strong {
       font-weight: bold
     }
-
-    /**
-             * Noto Sans CJK JP: https://www.google.com/get/noto/#sans-jpan
-             * Noto Sans JP: https://fonts.google.com/earlyaccess#Noto+Sans+JP
-             */
 
     @font-face {
       font-family: 'Myrica';
@@ -248,7 +247,8 @@
     }
 
     @page {
-      <%=paperSize %>
+      margin: 18mm 20mm 17mm 20mm;
+      size: <%= paper %> portrait;
     }
 
     body {
@@ -357,7 +357,7 @@
     }
 
     #title .auther {
-      margin: 50px 50px <%=Math.round(paperHeight /4) %>mm;
+      margin: 50px 50px;
       text-align: right;
     }
 
@@ -381,16 +381,17 @@
     }
 
     .disclaimer {
-      border-top: 1px solid black;
       bottom: 0;
       left: 0;
-      margin-top: 36pt;
+      margin: 36pt 8pt;
       font-size: 9pt;
     }
 
     .disclaimer ul {
+      padding-top:16pt;
+      padding-right:8pt;
+      border-top: 1px solid black;
       list-style: disc;
-      margin-right: 20px;
     }
 
     .service {

@@ -1,13 +1,13 @@
 # ビルド用テンプレート
 # 出力されるPDFサイズ
-# print (B5,ご家庭のプリンタ、コンビニコピー) | prepress (同人誌印刷所A4pdf, B5仕上がり) | ebook（余白極小PDF）
-paper: prepress 
+# JIS-B5 | A5 block_style.ejs#L251参照
+paper: JIS-B5 
 # 中表紙の有無
-cover: 0
+cover: 1
 # 目次の有無
 toc: 1
 # 奥付の有無
-imprint: 0
+imprint: 1
 # 書籍タイトル
 title: 'Flightbooks Sample Book'
 # 書籍著者
@@ -17,7 +17,7 @@ print_at: 'flightbooks printing'
 # 刊行日
 first_release_date: '2023/01 初版'
 # コピーライト表記
-copyright: '&copy; ku-suke'
+copyright: '© ku-suke'
 
 # ソースディレクトリ
 src_dir: book
@@ -29,5 +29,5 @@ chapters:
   - "03.md"
 
 # はじめにとおわりに(mdファイル名またはnull)
-introduction: null
-conclusion: null
+introduction: introduction.md
+conclusion: conclusion.md

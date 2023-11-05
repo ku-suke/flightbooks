@@ -1,18 +1,10 @@
 const fs = require('fs');
 const marked = require('marked');
+const markedhl = require("marked-highlight");
+const hljs = require('highlight.js');
 const yaml = require('js-yaml');
 const ejs = require('ejs');
 
-const PAPERSIZE = {
-    print: "size: 182mm 257mm; margin: 18mm 20mm 17mm 20mm;",
-    prepress: "size: 210mm 297mm; margin: 38mm 34mm 37mm 34mm;",
-    ebook: "size: 126mm 177mm; margin: 4mm 4mm 12mm;"
-};
-const PAPERHEIGHT = {
-    print: "194",
-    prepress: "194",
-    ebook: "150"
-};
 // YAMLの設定を読み込む
 const config = yaml.load(fs.readFileSync('./config.yml', 'utf8'));
 const srcDir = config.src_dir;
@@ -72,11 +64,17 @@ renderer.image = function (href, title, text) {
     return out;
 };
 
-marked.setOptions({
-    renderer: renderer,
-    highlight: function (code) {
-        return require("highlight.js").highlightAuto(code).value;
+marked.use(markedhl.markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
     }
+}));
+marked.use({
+    gfm: true,
+    sanitize: true,
+    renderer: renderer
 });
 
 let finalHtml = '<!DOCTYPE html><html lang="ja">';
@@ -85,8 +83,7 @@ let finalHtml = '<!DOCTYPE html><html lang="ja">';
 const templateHeader = fs.readFileSync('./template/block_style.ejs', 'utf8');
 const headerStyle = ejs.render(templateHeader, {
     title: config.title,
-    paperSize: PAPERSIZE[config.paper],
-    paperHeight: PAPERHEIGHT[config.paper]
+    paper: config.paper
 });
 finalHtml += '<head><meta charset="utf-8">' + headerStyle + '</head><body>';
 
@@ -141,8 +138,7 @@ if (config.conclusion) {
     const templateContent = fs.readFileSync('./template/block_conclusion.ejs', 'utf8');
     const conclusionMarkedown = fs.readFileSync(srcDir + '/' + config.conclusion, 'utf8');
     const conclusion = ejs.render(templateContent, {
-        conclusionMarked: marked.parse(conclusionMarkedown),
-        lastReleaseDate: config.last_release_date,
+        conclusionMarked: marked.parse(conclusionMarkedown)
     });
     finalHtml += conclusion;
 }
