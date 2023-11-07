@@ -157,6 +157,9 @@ if (config.imprint) {
 }
 
 finalHtml += '</body></html>';
+if (!fs.existsSync('./build')){
+    fs.mkdirSync('./build', { recursive: true });
+}
 fs.writeFileSync('./build/output.html', finalHtml);
 
 /**
