@@ -14,5 +14,3 @@ ADD template/*.ttf /usr/share/fonts/
 RUN fc-cache -fv
 
 WORKDIR /app
-
-RUN npm install
