@@ -32,6 +32,7 @@ Markdownで章ごとに執筆し、config.ymlを書き換えるだけで、同�
 
 ```
 docker compose build
+docker compose run flightbooks npm install
 docker compose run flightbooks node generate_html.js
 docker compose run flightbooks node generate_pdf.js
 ```
