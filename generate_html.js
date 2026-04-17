@@ -15,12 +15,15 @@ const renderer = new marked.Renderer();
 let chapterCount = 0; // h1のカウント
 let sectionCount = 0; // h2のカウント
 let subsectionCount = 0; // h3のカウント
+let numberingEnabled = true; // 章番号を振るかどうか
 // 章のレンダリング（回数をカウント）
 renderer.heading = function (text, level) {
     let prefixedText = text;
     let id = "";
 
-    if (level === 1) { // h1
+    if (!numberingEnabled) {
+        id = `header-${headerList.length + 1}`;
+    } else if (level === 1) { // h1
         chapterCount++;
         sectionCount = 0; // h1が新しく始まったら、h2のカウントをリセット
         subsectionCount = 0; // h1が新しく始まったら、h3のカウントをリセット
@@ -90,6 +93,20 @@ finalHtml += '<head><meta charset="utf-8">' + headerStyle + '</head><body>';
 // ソースディレクトリと各章のファイル名を取得
 const chapters = config.chapters;
 
+// はじめにページのHTMLを先に作成（章番号は付与しない）
+let introductionHtml = '';
+if (config.introduction) {
+    const templateContent = fs.readFileSync('./template/block_introduction.ejs', 'utf8');
+    const introductionMarkdown = fs.readFileSync(`${srcDir}/${config.introduction}`, 'utf8');
+    numberingEnabled = false;
+    const introMarked = marked.parse(introductionMarkdown);
+    numberingEnabled = true;
+    introductionHtml = ejs.render(templateContent, {
+        introMarked: introMarked,
+        firstReleaseDate: config.first_release_date,
+    });
+}
+
 // 各章を1つずつビルド
 let chapterHtml = '';
 chapters.forEach(chapterFile => {
@@ -104,6 +121,19 @@ chapters.forEach(chapterFile => {
 });
 // まだfinalHtmlには入れない
 
+// 終わりにページのHTML
+let conclusionHtml = '';
+if (config.conclusion) {
+    const templateContent = fs.readFileSync('./template/block_conclusion.ejs', 'utf8');
+    const conclusionMarkdown = fs.readFileSync(`${srcDir}/${config.conclusion}`, 'utf8');
+    const conclusionMarked = marked.parse(conclusionMarkdown);
+    conclusionHtml = ejs.render(templateContent, {
+        conclusionMarked: conclusionMarked
+    });
+}
+
+const TOC_PLACEHOLDER = '<!--TOC_PLACEHOLDER-->';
+
 // Coverページのレンダリング
 if (config.cover) {
     const templateContent = fs.readFileSync('./template/block_cover.ejs', 'utf8');
@@ -114,34 +144,19 @@ if (config.cover) {
     finalHtml += cover;
 }
 
-// はじめにページのレンダリング
-if (config.introduction) {
-    const templateContent = fs.readFileSync('./template/block_introduction.ejs', 'utf8');
-    const introductionMarkedown = fs.readFileSync(srcDir + '/' + config.introduction, 'utf8')
-    const introduction = ejs.render(templateContent, {
-        introMarked: marked.parse(introductionMarkedown),
-        firstReleaseDate: config.first_release_date,
-    });
-    finalHtml += introduction;
-}
+// はじめにページ（事前に生成済み）
+finalHtml += introductionHtml;
 
-// headerListを使用して目次のレンダリング
+// 目次は最後にまとめて挿入するためプレースホルダを配置
 if (config.toc) {
-    finalHtml += renderToc(headerList);
+    finalHtml += TOC_PLACEHOLDER;
 }
 
 // 本文のレンダリング
 finalHtml += '<div class="content-body">'+chapterHtml+'</div>';
 
-// 終わりにページのレンダリング
-if (config.conclusion) {
-    const templateContent = fs.readFileSync('./template/block_conclusion.ejs', 'utf8');
-    const conclusionMarkedown = fs.readFileSync(srcDir + '/' + config.conclusion, 'utf8');
-    const conclusion = ejs.render(templateContent, {
-        conclusionMarked: marked.parse(conclusionMarkedown)
-    });
-    finalHtml += conclusion;
-}
+// 終わりにページ（事前に生成済み）
+finalHtml += conclusionHtml;
 
 // 奥付のレンダリング
 if (config.imprint) {
@@ -157,6 +172,9 @@ if (config.imprint) {
 }
 
 finalHtml += '</body></html>';
+if (config.toc) {
+    finalHtml = finalHtml.replace(TOC_PLACEHOLDER, renderToc(headerList));
+}
 if (!fs.existsSync('./build')){
     fs.mkdirSync('./build', { recursive: true });
 }
